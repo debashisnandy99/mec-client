@@ -1,0 +1,14 @@
+.fullContainer {
+  height: 100vh;
+}
+
+.pl-0 {
+  padding-left: 0px !important;
+}
+.pr-0 {
+  padding-right: 0px !important;
+}
+
+.fullWidth {
+    width: 100% !important;
+}
