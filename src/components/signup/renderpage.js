@@ -5,7 +5,7 @@ import { Col, Container, Row, Button, Form, Spinner } from "react-bootstrap"
 import axios from "../../services/api"
 import * as SignUpCss from "./signup.module.css"
 
-const RenderPages = ({ formPage, nextPage }) => {
+const RenderPages = ({ formPage, sendingData }) => {
   const [fatherStatus, setFatherStatus] = useState(0)
   const [motherStatus, setMotherStatus] = useState(0)
   const [motherMecVerifyStatus, setMotherVerifyStatus] = useState(false)
@@ -17,7 +17,9 @@ const RenderPages = ({ formPage, nextPage }) => {
   const [fatherMecId, setFatherMecId] = useState("")
   const [errorMessageF, setErrorMessageF] = useState("")
   const [errorMessageM, setErrorMessageM] = useState("")
-  const [adhaarId, setAdhaarId] = useState()
+  const [password, checkPassword] = useState()
+  const [repassword, checkRePassword] = useState()
+
 
   const renderButtonForForm2 = () => {
     if (fatherStatus == 0 && motherStatus == 0) {
@@ -34,10 +36,21 @@ const RenderPages = ({ formPage, nextPage }) => {
           variant="primary"
           type="submit"
         >
-          Submit &amp; Next
+          {sendingData ? (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="mx-5"
+            />
+          ) : (
+            <p className={SignUpCss.m0}>Submit &amp; Next</p>
+          )}
         </Button>
       )
-    } else if (fatherStatus == 0) {
+    } else if (fatherStatus === 0) {
       return (
         <Button
           className="mb-5"
@@ -45,10 +58,21 @@ const RenderPages = ({ formPage, nextPage }) => {
           variant="primary"
           type="submit"
         >
-          Submit &amp; Next
+          {sendingData ? (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="mx-5"
+            />
+          ) : (
+            <p className={SignUpCss.m0}>Submit &amp; Next</p>
+          )}
         </Button>
       )
-    } else if (motherStatus == 0) {
+    } else if (motherStatus === 0) {
       return (
         <Button
           className="mb-5"
@@ -56,13 +80,35 @@ const RenderPages = ({ formPage, nextPage }) => {
           variant="primary"
           type="submit"
         >
-          Submit &amp; Next
+          {sendingData ? (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="mx-5"
+            />
+          ) : (
+            <p className={SignUpCss.m0}>Submit &amp; Next</p>
+          )}
         </Button>
       )
     } else {
       return (
         <Button className="mb-5" variant="primary" type="submit">
-          Submit &amp; Next
+          {sendingData ? (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="mx-5"
+            />
+          ) : (
+            <p className={SignUpCss.m0}>Submit &amp; Next</p>
+          )}
         </Button>
       )
     }
@@ -85,6 +131,7 @@ const RenderPages = ({ formPage, nextPage }) => {
         },
       })
       .then(res => {
+        console.log(res)
         if (type == "f") {
           setFatherVerifyStatus(false)
           setFatherMecIdStatus(true)
@@ -130,7 +177,7 @@ const RenderPages = ({ formPage, nextPage }) => {
           <Form.Control
             required
             type="tel"
-            id="tel"
+            id="phone"
             pattern="[0-9]{10}"
             placeholder="Enter phone number"
           />
@@ -143,7 +190,9 @@ const RenderPages = ({ formPage, nextPage }) => {
           <Form.Control
             required
             type="password"
-            id="pass"
+            value={password ? password : ""}
+            onChange={e => checkPassword(e.target.value)}
+            id="password"
             minLength="8"
             aria-describedby="passwordHelpBlock"
           />
@@ -159,12 +208,15 @@ const RenderPages = ({ formPage, nextPage }) => {
           <Form.Control
             minLength="8"
             required
+            isInvalid={password === repassword ? false : true}
+            value={repassword ? repassword : ""}
+            onChange={e => checkRePassword(e.target.value)}
             type="password"
             id="retypepass"
             aria-describedby="rePasswordHelpBlock"
           />
           <Form.Control.Feedback type="invalid">
-            Please retype password.
+            Password should be match.
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
@@ -181,7 +233,18 @@ const RenderPages = ({ formPage, nextPage }) => {
           </Form.Control.Feedback>
         </Form.Group>
         <Button className="mb-5" variant="primary" type="submit">
-          Submit &amp; Next
+          {sendingData ? (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="mx-5"
+            />
+          ) : (
+            <p className={SignUpCss.m0}>Submit &amp; Next</p>
+          )}
         </Button>
       </div>
     )
@@ -228,7 +291,7 @@ const RenderPages = ({ formPage, nextPage }) => {
               <Form.Group>
                 <Form.Control
                   value={fatherMecId}
-                  id="fatherMecId"
+                  id="fathersmecid"
                   onChange={e => setFatherMecId(e.target.value)}
                   placeholder="Enter Father MEC ID"
                 />
@@ -304,7 +367,7 @@ const RenderPages = ({ formPage, nextPage }) => {
               <Form.Group className="mb-3">
                 <Form.Control
                   value={motherMecId}
-                  id="motherMecId"
+                  id="mothermecid"
                   onChange={e => setMotherMecId(e.target.value)}
                   placeholder="Enter Mother MEC ID"
                 />
@@ -398,7 +461,18 @@ const RenderPages = ({ formPage, nextPage }) => {
           </Form.Control.Feedback>
         </Form.Group>
         <Button className="mb-5" variant="primary" type="submit">
-          Submit &amp; Next
+          {sendingData ? (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="mx-5"
+            />
+          ) : (
+            <p className={SignUpCss.m0}>Submit &amp; Next</p>
+          )}
         </Button>
       </div>
     )
@@ -426,7 +500,18 @@ const RenderPages = ({ formPage, nextPage }) => {
           </Form.Control.Feedback>
         </Form.Group>
         <Button className="mb-5" variant="primary" type="submit">
-          Submit &amp; Next
+          {sendingData ? (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="mx-5"
+            />
+          ) : (
+            <p className={SignUpCss.m0}>Submit &amp; Next</p>
+          )}
         </Button>
       </div>
     )
@@ -455,7 +540,18 @@ const RenderPages = ({ formPage, nextPage }) => {
           />
         </Form.Group>
         <Button className="mb-5" variant="primary" type="submit">
-          Submit &amp; Finish
+          {sendingData ? (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="mx-5"
+            />
+          ) : (
+            <p className={SignUpCss.m0}>Submit &amp; Finish</p>
+          )}
         </Button>
       </div>
     )

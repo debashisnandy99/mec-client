@@ -9,8 +9,8 @@ body {
 }
 
 .full-height {
-  height: 1000vh;
+  height: 100vh;
   display: flex;
-  align-content: center;
+  align-items: center;
   justify-content: center;
 }

@@ -1,16 +1,16 @@
-import * as axios from "./api"
+import axios from "./api"
 
 export const isBrowser = () => typeof window !== "undefined"
 
 export const getUser = () =>
-  isBrowser() && window.localStorage.getItem("gatsbyUser")
-    ? JSON.parse(window.localStorage.getItem("gatsbyUser"))
+  isBrowser() && window.localStorage.getItem("bearer")
+    ? JSON.parse(window.localStorage.getItem("bearer"))
     : {}
 
 const setUser = user =>
-  window.localStorage.setItem("gatsbyUser", JSON.stringify(user))
+  window.localStorage.setItem("bearer", JSON.stringify(user))
 
-export const handleLogin = ({ name, password, image, phone, email }) => {
+export const handleLogin = async ( name, password, image, phone, email ) => {
   let form_data = new FormData()
   form_data.append("image", image)
   form_data.append("phone", phone)
@@ -19,19 +19,19 @@ export const handleLogin = ({ name, password, image, phone, email }) => {
   if (email) {
     form_data.append("email", email)
   }
+  console.log(name);
   try {
-    let data = axios.post(url, form_data, {
+    let data = await axios.put("/auth/signup", form_data, {
       headers: {
         "content-type": "multipart/form-data",
       },
     })
     setUser({
-      username: `john`,
-      name: `Johnny`,
-      email: `johnny@example.org`,
+      token: data.data.token,
     })
     return true
   } catch (error) {
+    console.log(error.response.data);
     return false
   }
 }
@@ -39,7 +39,7 @@ export const handleLogin = ({ name, password, image, phone, email }) => {
 export const isLoggedIn = () => {
   const user = getUser()
 
-  return !!user.username
+  return !!user.token
 }
 
 export const logout = callback => {
