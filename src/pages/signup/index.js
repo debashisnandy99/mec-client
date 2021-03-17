@@ -4,6 +4,45 @@ import RenderPage from "../../components/signup/renderpage"
 
 const SignUpPage = () => {
   const [formPage, setFormPage] = useState(0)
+  const [validated, setValidated] = useState(false)
+
+  const handleSubmit = event => {
+    const form = event.currentTarget
+    if (form.checkValidity() === false) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      setValidated(true)
+    } else {
+      event.preventDefault();
+      event.stopPropagation();
+      event.target.reset();
+      console.log(event.target.name.value)
+      if (formPage === 0) {
+        setFormPage(formPage + 1)
+      } else if (formPage === 1) {
+        setFormPage(formPage + 1)
+      } else if (formPage === 2) {
+        setFormPage(formPage + 1)
+      } else if (formPage === 3) {
+        setFormPage(formPage + 1)
+      }
+      setValidated(false)
+    }
+  }
+
+  const goToNext = () => {
+    if (formPage === 0) {
+      setFormPage(formPage + 1)
+    } else if (formPage === 1) {
+      setFormPage(formPage + 1)
+    } else if (formPage === 2) {
+      setFormPage(formPage + 1)
+    } else if (formPage === 3) {
+      setFormPage(formPage + 1)
+    }
+    console.log("hello")
+  }
 
   return (
     <Container>
@@ -15,8 +54,8 @@ const SignUpPage = () => {
 
       <Row className="pt-2">
         <Col md={{ span: 4, offset: 4 }}>
-          <div class="d-grid gap-2">
-            <button class="btn btn-primary" type="button">
+          <div className="d-grid gap-2">
+            <button className="btn btn-primary" type="button">
               SignIn Using MEC ID Or UserName
             </button>
           </div>
@@ -35,25 +74,11 @@ const SignUpPage = () => {
 
       <Row>
         <Col md={{ span: 6, offset: 3 }}>
-          <Form>
-            <RenderPage formPage={formPage} />
-            <Row>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <RenderPage formPage={formPage} nextPage={goToNext} />
+            {/* <Row>
               <Col md={2}>
-                <Button
-                  className="mb-5"
-                  variant="primary"
-                  onClick={() => {
-                    if (formPage === 0) {
-                      setFormPage(formPage + 1)
-                    } else if (formPage === 1) {
-                      setFormPage(formPage + 1)
-                    } else if (formPage === 2) {
-                      setFormPage(formPage + 1)
-                    } else if (formPage === 3) {
-                      setFormPage(formPage + 1)
-                    }
-                  }}
-                >
+                <Button className="mb-5" variant="primary" onClick={() => {}}>
                   Next
                 </Button>
               </Col>
@@ -77,6 +102,7 @@ const SignUpPage = () => {
                 )}
               </Col>
             </Row>
+             */}
           </Form>
         </Col>
       </Row>

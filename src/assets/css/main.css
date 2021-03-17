@@ -7,3 +7,10 @@
 body {
   font-family: poppins, sans-serif;
 }
+
+.full-height {
+  height: 1000vh;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
