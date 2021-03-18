@@ -10,7 +10,7 @@ export const getUser = () =>
 const setUser = user =>
   window.localStorage.setItem("bearer", JSON.stringify(user))
 
-export const handleLogin = async ( name, password, image, phone, email ) => {
+export const handleLogin = async (name, password, image, phone, email) => {
   let form_data = new FormData()
   form_data.append("image", image)
   form_data.append("phone", phone)
@@ -19,7 +19,7 @@ export const handleLogin = async ( name, password, image, phone, email ) => {
   if (email) {
     form_data.append("email", email)
   }
-  console.log(name);
+  console.log(name)
   try {
     let data = await axios.put("/auth/signup", form_data, {
       headers: {
@@ -28,10 +28,11 @@ export const handleLogin = async ( name, password, image, phone, email ) => {
     })
     setUser({
       token: data.data.token,
+      uid: data.data.userId,
     })
     return true
   } catch (error) {
-    console.log(error.response.data);
+    console.log(error.response.data)
     return false
   }
 }
@@ -39,10 +40,9 @@ export const handleLogin = async ( name, password, image, phone, email ) => {
 export const isLoggedIn = () => {
   const user = getUser()
 
-  return !!user.token
+  return !!user.uid
 }
 
-export const logout = callback => {
+export const logout = () => {
   setUser({})
-  callback()
 }

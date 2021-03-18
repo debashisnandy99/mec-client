@@ -1,118 +1,97 @@
-import * as React from "react"
-import { Container, Row, Col, Card, Table } from "react-bootstrap"
+import React, { useState } from "react"
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap"
+import { navigate } from "gatsby"
+import axios from "../../services/api"
 import * as PendingStyles from "./pending.module.css"
 
-const PendingPage = () => (
-  <Container>
-    <Row className="mt-5">
-      <Col md={2}>
-        <Card style={{ width: "10rem" }} className="mx-auto">
-          <Card.Img
-            variant="top"
-            src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-          />
-        </Card>
-      </Col>
-      <Col md={4}>
-        <div className="mt-3">
-          <p className={PendingStyles.pTag}>Debashis Nandy</p>
-          <p className={PendingStyles.pTag}>DOB : 21/01/1997</p>
-          <p className={PendingStyles.pTag}>MALE</p>
-          <Card style={{ width: "10rem" }} className="mt-4">
-            <Card.Img
-              variant="top"
-              src="https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-            />
-            <Card.Title className="h6 mt-1 mx-auto">Signature</Card.Title>
-          </Card>
-        </div>
-      </Col>
-      <Col md={6}>
-        <Card>
-          <Card.Body>
-            <Card.Title>Other Details</Card.Title>
+const PendingLoginPage = () => {
+  const [validated, setValidated] = useState(false)
+  const [wentWrong, setVaidationStatus] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-            <Card.Text className="mt-3">
-              <Row>
-                <Col md={4}>
-                  <span class={PendingStyles.spanTagHeader}>
-                    Fathers Name :{" "}
-                  </span>
-                </Col>
-                <Col md="auto">
-                  <span>Debashis Nandy</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={4}>
-                  <span class={PendingStyles.spanTagHeader}>
-                    Mothers Name :{" "}
-                  </span>
-                </Col>
-                <Col md="auto">
-                  <span>Debashis Nandy</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={4}>
-                  <span class={PendingStyles.spanTagHeader}>Address : </span>
-                </Col>
-                <Col md="auto">
-                  <span>5T Mathur Babu Lane Kolkata 700015</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={4}>
-                  <span class={PendingStyles.spanTagHeader}>Phone : </span>
-                </Col>
-                <Col md="auto">
-                  <span>+91 8583 858 959</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col md="auto">
-                  <span class={PendingStyles.spanTagHeader}>Email : </span>
-                </Col>
-                <Col md="auto">
-                  <span></span>
-                </Col>
-              </Row>
-            </Card.Text>
-          </Card.Body>
+  const handleSubmit = event => {
+    const form = event.currentTarget
+    if (form.checkValidity() === false) {
+      event.preventDefault()
+      event.stopPropagation()
 
-          <Card.Footer>
-            <small className="text-muted">MEC Verification pending</small>
-          </Card.Footer>
-        </Card>
-      </Col>
-    </Row>
-    <Row className="mt-5">
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th className="text-center">Department</th>
-            <th className="text-center">Document ID</th>
-            <th className="text-center">Status</th>
-            <th className="text-center">Image</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="text-center align-middle">Adhaar</td>
-            <td className="text-center align-middle">1800 1452 5426</td>
-            <td className="text-center align-middle">Pending</td>
-            <td><Card style={{ width: "10rem" }} className="mx-auto">
-          <Card.Img
-            variant="top"
-            src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-          />
-        </Card></td>
-          </tr>
-          
-        </tbody>
-      </Table>
-    </Row>
-  </Container>
-)
+      setValidated(true)
+    } else {
+      event.preventDefault()
+      event.stopPropagation()
+      let form_data = new FormData()
+      form_data.append("phone", event.target.phone.value)
+      axios
+        .post("/auth/getdetails", form_data, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then(res => {
+          const dataUser = res.data
+          navigate("/pendingverification/pending", {
+            state: { userData: dataUser },
+            replace: true,
+          })
+          setErrorMessage("")
+          setVaidationStatus(false)
+          setValidated(false)
+        })
+        .catch(e => {
+          setErrorMessage(e.response.data.message)
+          setVaidationStatus(true)
+        })
+    }
+  }
 
-export default PendingPage
+  return (
+    <Container>
+      <Row className="mt-5 mb-4">
+        <Col md={{ span: 6, offset: 3 }}>
+          <h1>Check MEC ID Status</h1>
+        </Col>
+      </Row>
+      {wentWrong ? (
+        <Row className="pb-2">
+          <Col xs={{ span: 6, offset: 3 }}>
+            <Alert variant="danger">{errorMessage}</Alert>
+          </Col>
+        </Row>
+      ) : (
+        <div></div>
+      )}
+      <Row>
+        <Col md={{ span: 6, offset: 3 }}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Phone Number</Form.Label>
+              <Form.Control
+                required
+                type="tel"
+                id="phone"
+                pattern="[0-9]{10}"
+                placeholder="Enter phone number"
+              />
+              <Form.Control.Feedback type="invalid">
+                Please enter valid phone number.
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>OTP</Form.Label>
+              <Form.Control required id="name" placeholder="Enter OTP" />
+              <Form.Control.Feedback type="invalid">
+                Please enter valid OTP.
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
+  )
+}
+
+export default PendingLoginPage

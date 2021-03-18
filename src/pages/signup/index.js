@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import axios from "../../services/api"
 import { getUser, isLoggedIn, logout, handleLogin } from "../../services/auth"
 import { Col, Container, Row, ProgressBar, Form, Alert } from "react-bootstrap"
@@ -13,6 +13,7 @@ const SignUpPage = () => {
 
   const handleSubmit = event => {
     const form = event.currentTarget
+    setSendingDataStatus(true)
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
@@ -42,7 +43,7 @@ const SignUpPage = () => {
             }
           })
           .catch(e => {
-            setVaidationStatus(false)
+            setVaidationStatus(true)
           })
       } else if (formPage === 1) {
         let target = event.target
@@ -132,6 +133,7 @@ const SignUpPage = () => {
             },
           })
           .then(res => {
+            navigate("/signup/ok", { replace: true })
             setSendingDataStatus(false)
             setVaidationStatus(false)
             event.target.reset()

@@ -1,7 +1,7 @@
 import axios from "axios"
+import { url } from "./details"
 
 export default axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: url(),
   timeout: 1000,
 })
-

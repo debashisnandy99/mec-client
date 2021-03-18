@@ -11,14 +11,14 @@ const IndexPage = () => (
     <Container>
       <Row>
         <Col md={{ span: 6, offset: 3 }}>
-          <div class="d-grid gap-2">
+          <div className="d-grid gap-2">
             <Link className="btn btn-primary" to="/login" type="button">
               Log In Kiosk
             </Link>
             <Link className="btn btn-outline-primary" to="/signup" type="button">
               Register For MEC
             </Link>
-            <Link className="btn btn-primary" type="button">
+            <Link className="btn btn-primary" to="/pendingverification" type="button">
               Check MEC Status
             </Link>
           </div>
