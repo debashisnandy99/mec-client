@@ -43,6 +43,8 @@ const SignUpPage = () => {
             }
           })
           .catch(e => {
+            console.log(e)
+            setSendingDataStatus(false)
             setVaidationStatus(true)
           })
       } else if (formPage === 1) {
@@ -73,6 +75,7 @@ const SignUpPage = () => {
             setFormPage(formPage + 1)
           })
           .catch(e => {
+            setSendingDataStatus(false)
             setVaidationStatus(false)
           })
       } else if (formPage === 2) {
@@ -95,6 +98,7 @@ const SignUpPage = () => {
             setFormPage(formPage + 1)
           })
           .catch(e => {
+            setSendingDataStatus(false)
             setVaidationStatus(false)
           })
       } else if (formPage === 3) {
@@ -117,6 +121,7 @@ const SignUpPage = () => {
             setFormPage(formPage + 1)
           })
           .catch(e => {
+            setSendingDataStatus(false)
             setVaidationStatus(false)
           })
       } else if (formPage === 4) {
@@ -139,6 +144,7 @@ const SignUpPage = () => {
             event.target.reset()
           })
           .catch(e => {
+            setSendingDataStatus(false)
             setVaidationStatus(false)
           })
       }

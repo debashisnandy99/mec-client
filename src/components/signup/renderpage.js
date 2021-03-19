@@ -538,6 +538,9 @@ const RenderPages = ({ formPage, sendingData }) => {
             type="file"
             id="image"
           />
+          <Form.Control.Feedback type="invalid">
+            Please upload Birth Certificate copy.
+          </Form.Control.Feedback>
         </Form.Group>
         <Button className="mb-5" variant="primary" type="submit">
           {sendingData ? (
