@@ -1,6 +1,7 @@
 import axios from "axios"
+import { ipfsUrl } from "./details"
 
 export default axios.create({
-  baseURL: "http://127.0.0.1:8080",
+  baseURL: ipfsUrl(),
   timeout: 100000,
 })

@@ -6,7 +6,9 @@ import { Col, Container, Row, Button } from "react-bootstrap"
 
 const OkPage = () => {
   if (!isLoggedIn()) {
-    navigate("/")
+    if (typeof window !== `undefined`) {
+      navigate("/");
+    }
     return (<div></div>);
   }
 

@@ -6,7 +6,9 @@ import { url } from "../../services/details"
 
 const PendingPage = ({ location }) => {
   if (!location.state) {
-    navigate("/", { replace: true })
+    if (typeof window !== `undefined`) {
+      navigate("/", { replace: true })
+    }
 
     return <div></div>
   }

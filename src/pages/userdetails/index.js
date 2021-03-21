@@ -1,6 +1,6 @@
 import * as React from "react"
 import { navigate, Link } from "gatsby"
-import { Container, Row, Col, Card, Table,Button } from "react-bootstrap"
+import { Container, Row, Col, Card, Table, Button } from "react-bootstrap"
 import {
   getUser,
   isLoggedIn,
@@ -27,13 +27,12 @@ class UserDetails extends React.Component {
         },
       })
       .then(res => {
-        console.log(res.data)
         this.setState({ user: res.data.user, ipfs: res.data.ipfsHash })
         return ipfsaxios.post("/api/v0/ls?arg=" + res.data.ipfsHash)
       })
       .then(res => {
         let imageList = []
-        console.log(res)
+        
         res.data.Objects[0].Links.forEach(value => {
           imageList.push(value.Name)
         })
@@ -45,7 +44,9 @@ class UserDetails extends React.Component {
   }
   render() {
     if (!isLoggedIn()) {
-      navigate("/", { replace: true })
+      if (typeof window !== `undefined`) {
+        navigate("/", { replace: true })
+      }
       return <div></div>
     }
     return !this.state.isDataLoaded ? (
@@ -79,6 +80,7 @@ class UserDetails extends React.Component {
             <div className="mt-4">
               <p className={PendingStyles.pTag}>{this.state.user.name}</p>
               <p className={PendingStyles.pTag}>DOB : {this.state.user.dob}</p>
+              <p className={PendingStyles.pTag}>MEC : {this.state.user.mecId}</p>
               <Card style={{ width: "10rem" }} className="mt-4">
                 <Card.Img
                   variant="top"
@@ -168,8 +170,8 @@ class UserDetails extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.images.map(value => (
-                <tr key={value._id}>
+              {this.state.images.map((value,idx) => (
+                <tr key={idx}>
                   <td className="text-center align-middle">
                     {value.split(".")[0]}
                   </td>
